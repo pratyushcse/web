@@ -73,7 +73,7 @@ const NotesAdmin = () => {
   // Fetch subjects based on branch and semester
   const fetchSubjects = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/subjects", {
+      const response = await axios.get("https://edu-box-backend.onrender.com/api/subjects", {
         params: { branch: newSubject.branch, semester },
       });
       setSubjects(response.data); // Update subjects
@@ -87,7 +87,7 @@ const NotesAdmin = () => {
 
   const fetchModules = async (subjectName) => {
     try {
-      const response = await axios.get("http://localhost:8080/api/unit", {
+      const response = await axios.get("https://edu-box-backend.onrender.com/api/unit", {
         params: { branch: newSubject.branch, semester, subject: subjectName },
       });
       setModules(response.data); // Update modules
@@ -110,7 +110,7 @@ const NotesAdmin = () => {
 
   const deleteSubject = async (subjectId) => {
     try {
-      await axios.delete(`http://localhost:8080/api/subjects/${subjectId}`);
+      await axios.delete(`https://edu-box-backend.onrender.com/api/subjects/${subjectId}`);
       setSubjects(subjects.filter((subject) => subject.id !== subjectId)); // Remove deleted subject from state
       setErrorMessage(""); // Clear error
     } catch (error) {
@@ -121,7 +121,7 @@ const NotesAdmin = () => {
 
   const deleteUnit = async (unitId) => {
     try {
-      await axios.delete(`http://localhost:8080/api/unit/${unitId}`);
+      await axios.delete(`https://edu-box-backend.onrender.com/api/unit/${unitId}`);
       setModules(modules.filter((module) => module.id !== unitId)); // Remove deleted unit from state
       setErrorMessage(""); // Clear error
     } catch (error) {
@@ -140,7 +140,7 @@ const NotesAdmin = () => {
         moduleName,
         pdfLink,
       };
-      const response = await axios.post("http://localhost:8080/api/unit", unitData);
+      const response = await axios.post("https://edu-box-backend.onrender.com/api/unit", unitData);
       setModules([...modules, response.data]); // Update modules state with newly added unit
       setModuleNo("");
       setModuleName("");
@@ -165,7 +165,7 @@ const NotesAdmin = () => {
   const handleAddSubject = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/api/subjects", newSubject);
+      const response = await axios.post("https://edu-box-backend.onrender.com/api/subjects", newSubject);
       setSubjects([...subjects, response.data]); // Update subjects list
       setNewSubject({
         branch: newSubject.branch, // Set branch from the logged-in user

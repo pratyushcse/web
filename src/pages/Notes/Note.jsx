@@ -15,7 +15,7 @@ const Note = () => {
 
   const fetchSubjects = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/subjects", {
+      const response = await axios.get("https://edu-box-backend.onrender.com/api/subjects", {
         params: { branch, semester },
       });
       setSubjects(response.data);
@@ -29,7 +29,7 @@ const Note = () => {
 
   const fetchModules = async (subjectName) => {
     try {
-      const response = await axios.get("http://localhost:8080/api/unit", {
+      const response = await axios.get("https://edu-box-backend.onrender.com/api/unit", {
         params: { branch, semester, subject: subjectName },
       });
       setModules(response.data);
