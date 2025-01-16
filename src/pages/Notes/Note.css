@@ -92,9 +92,10 @@
   font-size: 1.1rem;
   font-weight: bold;
 }
-
 .subject-more-btn {
-  margin-left: 94%;
+  position: absolute;
+  right: 50px; /* Adjust based on your preference */
+ 
   padding: 5px 10px;
   background-color: #ffcc00; /* Yellow background */
   color: #333; /* Dark text */
@@ -107,6 +108,7 @@
 .subject-more-btn:hover {
   background-color: #f5deb3; /* Light yellow background */
 }
+
 
 /* Module dropdown */
 .module-dropdown {
@@ -176,3 +178,4 @@
   font-weight: bold;
 }
   
+

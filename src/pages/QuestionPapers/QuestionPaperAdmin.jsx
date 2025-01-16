@@ -68,7 +68,7 @@ const QuestionPaperAdmin = () => {
       return;
     }
     try {
-      const response = await axios.get("http://localhost:8080/api/questionpapers", {
+      const response = await axios.get("https://edu-box-backend.onrender.com/api/questionpapers", {
         params: { branch: loggedInBranch, sem: semester, year },
       });
       setQuestionPapers(response.data);
@@ -82,7 +82,7 @@ const QuestionPaperAdmin = () => {
 
   const handleAddQuestionPaper = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/api/questionpapers", {
+      const response = await axios.post("https://edu-box-backend.onrender.com/api/questionpapers", {
         branch: loggedInBranch,
         sem: semester,
         year,
@@ -96,7 +96,7 @@ const QuestionPaperAdmin = () => {
         cie3: "",
         see: "",
       });
-      alert("Question paper added successfully!");
+
     } catch (error) {
       console.error("Error adding question paper:", error);
       setErrorMessage("Failed to add question paper. Please try again.");
@@ -105,9 +105,9 @@ const QuestionPaperAdmin = () => {
 
   const handleDeleteQuestionPaper = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/api/questionpapers/${id}`);
+      await axios.delete(`https://edu-box-backend.onrender.com/api/questionpapers/${id}`);
       setQuestionPapers(questionPapers.filter((qp) => qp.id !== id));
-      alert("Question paper deleted successfully!");
+
     } catch (error) {
       console.error("Error deleting question paper:", error);
       setErrorMessage("Failed to delete question paper. Please try again.");

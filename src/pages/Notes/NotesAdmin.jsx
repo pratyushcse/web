@@ -3,23 +3,21 @@ import axios from "axios";
 import "./NotesAdmin.css";
 
 const NotesAdmin = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginDetails, setLoginDetails] = useState({ email: "", password: "" });
-  const [errorMessage, setErrorMessage] = useState(""); // Error message
-  const [semester, setSemester] = useState(""); // Semester state
-  const [subjects, setSubjects] = useState([]); // Fetched subjects
-  const [modules, setModules] = useState([]); // Modules for a subject
-  const [selectedSubject, setSelectedSubject] = useState(null); // Selected subject
-  const [isDataFetched, setIsDataFetched] = useState(false); // Subject fetch status
-  const [dropdownVisible, setDropdownVisible] = useState(false); // Dropdown visibility
-  const [isAddSubjectVisible, setIsAddSubjectVisible] = useState(false); // Controls visibility of Add Subject form
+  const [errorMessage, setErrorMessage] = useState("");
+  const [semester, setSemester] = useState("");
+  const [subjects, setSubjects] = useState([]);
+  const [modules, setModules] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState(null);
+  const [isDataFetched, setIsDataFetched] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [isAddSubjectVisible, setIsAddSubjectVisible] = useState(false);
 
-  // For Add Unit form
   const [moduleNo, setModuleNo] = useState("");
   const [moduleName, setModuleName] = useState("");
   const [pdfLink, setPdfLink] = useState("");
 
-  // For Add Subject form
   const [newSubject, setNewSubject] = useState({
     branch: "",
     semester: "",
@@ -35,10 +33,9 @@ const NotesAdmin = () => {
     { email: "ch@college.com", password: "ch123", branch: "CH" },
     { email: "me@college.com", password: "me123", branch: "ME" },
     { email: "po@college.com", password: "po123", branch: "PO" },
-    { email: "pratyush@gmail.com", password: "pratyush"} // Add branch for Pratyush
+    { email: "pratyush@gmail.com", password: "pratyush" }
   ];
 
-  
   const handleLogin = (e) => {
     e.preventDefault();
     const hod = hodCredentials.find(
@@ -47,14 +44,14 @@ const NotesAdmin = () => {
     );
 
     if (loginDetails.email === "pratyush@gmail.com") {
-      window.location.href = "/notes/login";  // Redirect to /questionpaper/login
-      return;  // Prevent further logic execution if redirected
+      window.location.href = "/notes/login";
+      return;
     }
-    
+
     if (hod) {
       setIsLoggedIn(true);
       setErrorMessage("");
-      setNewSubject({ ...newSubject, branch: hod.branch }); // Set branch from the logged-in user
+      setNewSubject({ ...newSubject, branch: hod.branch });
     } else {
       setErrorMessage("Invalid email or password. Please try again.");
     }
@@ -70,15 +67,14 @@ const NotesAdmin = () => {
     setErrorMessage("");
   };
 
-  // Fetch subjects based on branch and semester
   const fetchSubjects = async () => {
     try {
       const response = await axios.get("https://edu-box-backend.onrender.com/api/subjects", {
         params: { branch: newSubject.branch, semester },
       });
-      setSubjects(response.data); // Update subjects
-      setIsDataFetched(true); // Set fetched flag
-      setErrorMessage(""); // Clear error
+      setSubjects(response.data);
+      setIsDataFetched(true);
+      setErrorMessage("");
     } catch (error) {
       console.error("Error fetching subjects:", error);
       setErrorMessage("Failed to fetch subjects. Please try again.");
@@ -90,8 +86,8 @@ const NotesAdmin = () => {
       const response = await axios.get("https://edu-box-backend.onrender.com/api/unit", {
         params: { branch: newSubject.branch, semester, subject: subjectName },
       });
-      setModules(response.data); // Update modules
-      setErrorMessage(""); // Clear error
+      setModules(response.data);
+      setErrorMessage("");
     } catch (error) {
       console.error("Error fetching modules:", error);
       setErrorMessage("Failed to fetch modules. Please try again.");
@@ -104,15 +100,15 @@ const NotesAdmin = () => {
       setIsDataFetched(false);
     } else {
       fetchSubjects();
-      setIsAddSubjectVisible(true); // Show Add Subject form after subjects are fetched
+      setIsAddSubjectVisible(true);
     }
   };
 
   const deleteSubject = async (subjectId) => {
     try {
       await axios.delete(`https://edu-box-backend.onrender.com/api/subjects/${subjectId}`);
-      setSubjects(subjects.filter((subject) => subject.id !== subjectId)); // Remove deleted subject from state
-      setErrorMessage(""); // Clear error
+      setSubjects(subjects.filter((subject) => subject.id !== subjectId));
+      setErrorMessage("");
     } catch (error) {
       console.error("Error deleting subject:", error);
       setErrorMessage("Failed to delete subject. Please try again.");
@@ -122,8 +118,8 @@ const NotesAdmin = () => {
   const deleteUnit = async (unitId) => {
     try {
       await axios.delete(`https://edu-box-backend.onrender.com/api/unit/${unitId}`);
-      setModules(modules.filter((module) => module.id !== unitId)); // Remove deleted unit from state
-      setErrorMessage(""); // Clear error
+      setModules(modules.filter((module) => module.id !== unitId));
+      setErrorMessage("");
     } catch (error) {
       console.error("Error deleting unit:", error);
       setErrorMessage("Failed to delete unit. Please try again.");
@@ -141,11 +137,11 @@ const NotesAdmin = () => {
         pdfLink,
       };
       const response = await axios.post("https://edu-box-backend.onrender.com/api/unit", unitData);
-      setModules([...modules, response.data]); // Update modules state with newly added unit
+      setModules([...modules, response.data]);
       setModuleNo("");
       setModuleName("");
       setPdfLink("");
-      setErrorMessage(""); // Clear error
+      setErrorMessage("");
     } catch (error) {
       console.error("Error adding unit:", error);
       setErrorMessage("Failed to add unit. Please try again.");
@@ -154,30 +150,36 @@ const NotesAdmin = () => {
 
   const handleMoreClick = (subject) => {
     if (selectedSubject === subject) {
-      setDropdownVisible(!dropdownVisible); // Toggle visibility
+      setDropdownVisible(!dropdownVisible);
     } else {
       setSelectedSubject(subject);
-      setDropdownVisible(true); // Show dropdown when a new subject is clicked
-      fetchModules(subject.subject); // Use 'subject.subject' to fetch modules
+      setDropdownVisible(true);
+      fetchModules(subject.subject);
     }
   };
 
   const handleAddSubject = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("https://edu-box-backend.onrender.com/api/subjects", newSubject);
-      setSubjects([...subjects, response.data]); // Update subjects list
+      const subjectData = { ...newSubject, semester };
+      const response = await axios.post("https://edu-box-backend.onrender.com/api/subjects", subjectData);
+      setSubjects([...subjects, response.data]);
       setNewSubject({
-        branch: newSubject.branch, // Set branch from the logged-in user
-        semester: semester, // Set semester from the selected state
-        subject: '', // Reset subject input
+        branch: newSubject.branch,
+        semester: semester,
+        subject: "",
       });
-      setErrorMessage(""); // Clear error message
-      setIsAddSubjectVisible(true); // Show Add Subject form after adding subject
+      setErrorMessage("");
+      setIsAddSubjectVisible(true);
     } catch (error) {
       console.error("Error adding subject:", error);
       setErrorMessage("Failed to add subject. Please try again.");
     }
+  };
+
+  const handleSemesterClick = (sem) => {
+    setSemester(sem);
+    setNewSubject({ ...newSubject, semester: sem });
   };
 
   return (
@@ -214,10 +216,10 @@ const NotesAdmin = () => {
           <div className="semester-container">
             <h2 className="semester-title">Select Semester</h2>
             <div className="semester-buttons">
-              {['Sem1', 'Sem2', 'Sem3', 'Sem4', 'Sem5'].map((sem) => (
+              {["Sem1", "Sem2", "Sem3", "Sem4", "Sem5"].map((sem) => (
                 <button
                   key={sem}
-                  onClick={() => setSemester(sem)}
+                  onClick={() => handleSemesterClick(sem)}
                   className={`semester-button ${semester === sem ? "selected" : ""}`}
                 >
                   {sem}
@@ -254,10 +256,11 @@ const NotesAdmin = () => {
                       >
                         Delete
                       </button>
-                      {selectedSubject === subject && dropdownVisible && (
-                        <div className="module-dropdown">
-                          <h3>Modules for {subject.subject}</h3>
-                          <table className="module-table">
+                      {dropdownVisible && selectedSubject === subject && (
+                       
+                       <div className="modules-dropdown">
+                       <h3>Units for {subject.subject}</h3>
+                       <table className="module-table">
                             <thead>
                               <tr>
                                 <th>Module No</th>
@@ -298,74 +301,79 @@ const NotesAdmin = () => {
                               )}
                             </tbody>
                           </table>
+                       <div className="add-unit-container">
+                         <h4>Add Unit</h4>
+                         <form onSubmit={(e) => { e.preventDefault(); addUnit(); }}>
+                           <input
+                             type="text"
+                             placeholder="Unit No"
+                             value={moduleNo}
+                             onChange={(e) => setModuleNo(e.target.value)}
+                             required
+                           />
+                           <input
+                             type="text"
+                             placeholder="Unit Name"
+                             value={moduleName}
+                             onChange={(e) => setModuleName(e.target.value)}
+                             required
+                           />
+                           <input
+                             type="text"
+                             placeholder="PDF Link"
+                             value={pdfLink}
+                             onChange={(e) => setPdfLink(e.target.value)}
+                             required
+                           />
+                           <button type="submit" className="add-unit-btn">Add Unit</button>
+                         </form>
+                       </div>
+                     </div>
+                   )}
+                 </li>
+               ))
+             ) : (
+               <li>No subjects available</li>
+             )}
+           </ul>
+         </div>
+       )}
 
-                          {/* Add Unit Form */}
-                          <div className="add-unit-form">
-                            <h4>Add New Unit</h4>
-                            <input
-                              type="text"
-                              placeholder="Module No"
-                              value={moduleNo}
-                              onChange={(e) => setModuleNo(e.target.value)}
-                            />
-                            <input
-                              type="text"
-                              placeholder="Module Name"
-                              value={moduleName}
-                              onChange={(e) => setModuleName(e.target.value)}
-                            />
-                            <input
-                              type="text"
-                              placeholder="PDF Link"
-                              value={pdfLink}
-                              onChange={(e) => setPdfLink(e.target.value)}
-                            />
-                            <button onClick={addUnit} className="add-unit-btn">
-                              Add Unit
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </li>
-                  ))
-                ) : (
-                  <div>No subjects available</div>
-                )}
-              </ul>
-            </div>
-          )}
+{isAddSubjectVisible && (
+  <div className="add-subject-container">
+    <h2 className="add-subject-title">Add New Subject</h2>
+    <form onSubmit={handleAddSubject} className="add-subject-form">
+    <input
+        type="text"
+        placeholder="Subject Name"
+        value={newSubject.subject}
+        onChange={(e) => setNewSubject({ ...newSubject, subject: e.target.value })}
+        required
+      />
+      <input
+        type="text"
+        value={newSubject.branch}
+        readOnly
+        placeholder="Branch"
+        className="read-only-input"
+      />
+      <input
+        type="text"
+        value={newSubject.semester}
+        readOnly
+        placeholder="Semester"
+        className="read-only-input"
+      />
+     
+      <button type="submit" className="add-subject-btn">Add Subject</button>
+    </form>
+  </div>
+)}
 
-          {isAddSubjectVisible && (
-            <div className="add-subject-form">
-              <form onSubmit={handleAddSubject}>
-                <input
-                  type="text"
-                  placeholder="Subject Name"
-                  value={newSubject.subject}
-                  onChange={(e) => setNewSubject({ ...newSubject, subject: e.target.value })}
-                />
-                <input
-                  type="text"
-                  placeholder="Branch"
-                  value={newSubject.branch} // Set branch from logged-in user
-                  readOnly
-                />
-                <input
-                  type="text"
-                  placeholder="Semester"
-                  value={semester} // Ensure semester is set here
-                  readOnly
-                />
-                <button type="submit" className="add-subject-btn">
-                  Add Subject
-                </button>
-              </form>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
+     </div>
+   )}
+ </div>
+);
 };
 
 export default NotesAdmin;
