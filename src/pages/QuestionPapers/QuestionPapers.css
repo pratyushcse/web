@@ -13,6 +13,11 @@
   position: relative;
 }
 
+.question-heading {
+  color: #ffcc00; /* Change to your desired color */
+}
+
+
 /* Login Button */
 .login-button {
   text-decoration: none;
@@ -230,27 +235,28 @@
 
 /* Responsive design for smaller screens */
 @media screen and (max-width: 768px) {
-  .qp-table__heading, .qp-table__data {
-    font-size: 0.9rem;
-    padding: 10px;
+  .qp-unique-container {
+    padding: 15px;
+  }
+
+  .login-button {
+    position: static; /* Remove absolute positioning for responsiveness */
+    margin: 0 auto 15px; /* Center the button and add spacing below */
+    width: 100%; /* Full width for better accessibility on small screens */
+    max-width: 300px; /* Limit maximum width */
+    font-size: 1rem; /* Adjust font size for smaller screens */
   }
 
   .qp-app__container {
     padding: 15px;
   }
 
+  .qp-table__heading, .qp-table__data {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
   .qp-table__container {
     font-size: 0.9rem;
   }
-}
-.question-heading {
-  font-size: 2.4em; /* Large font size for prominence */
-  color: #ffcc00; /* Yellow text color for visibility */
-  text-transform: uppercase; /* Uppercase for emphasis */
-  text-align: center; /* Center alignment */
-  font-weight:bolder; /* Bold for importance */
-  margin: 20px 0; /* Spacing above and below */
-; /* Underline with yellow border */
-  padding-bottom: 10px; /* Space between text and underline */
-  letter-spacing: 1.5px; /* Slight spacing between letters */
 }
